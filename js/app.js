@@ -42,46 +42,48 @@
 })();
 
 function interactiveImage(selector, itemsArray) {
-  const wrapper = document.querySelector(selector);
-  console.log(wrapper);
-  const bg = wrapper.querySelector("img");
-  console.log(bg);
-  const pinsArray = [];
-  const cardsArray = [];
+  document.addEventListener("DOMContentLoaded", () => {
+    const wrapper = document.querySelector(selector);
+    console.log(wrapper);
+    const bg = wrapper.querySelector("img");
+    console.log(bg);
+    const pinsArray = [];
+    const cardsArray = [];
 
-  wrapper.classList.add("_interactive");
-  bg.classList.add("_interactive__bg");
+    wrapper.classList.add("_interactive");
+    bg.classList.add("_interactive__bg");
 
-  initItems(wrapper, bg);
-  console.log(wrapper);
+    initItems(wrapper, bg);
+    console.log(wrapper);
 
-  if (window.innerWidth > 1200) {
-    wrapper.addEventListener("mouseover", hoverMode);
-  } else {
-    for (let i = 0; i < pinsArray.length; i++) {
-      const pin = pinsArray[i];
-      pin.addEventListener("click", popupMode);
-    }
-  }
-
-  window.addEventListener("resize", () => {
     if (window.innerWidth > 1200) {
-      for (let i = 0; i < pinsArray.length; i++) {
-        pinsArray[i].removeEventListener("click", popupMode);
-      }
-
-      if (!wrapper.hasEventListener("mouseover")) {
-        wrapper.addEventListener("mouseover", hoverMode);
-      }
+      wrapper.addEventListener("mouseover", hoverMode);
     } else {
-      wrapper.removeEventListener("mouseover", hoverMode);
       for (let i = 0; i < pinsArray.length; i++) {
         const pin = pinsArray[i];
-        if (!pin.hasEventListener("click")) {
-          pin.addEventListener("click", popupMode);
-        }
+        pin.addEventListener("click", popupMode);
       }
     }
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1200) {
+        for (let i = 0; i < pinsArray.length; i++) {
+          pinsArray[i].removeEventListener("click", popupMode);
+        }
+
+        if (!wrapper.hasEventListener("mouseover")) {
+          wrapper.addEventListener("mouseover", hoverMode);
+        }
+      } else {
+        wrapper.removeEventListener("mouseover", hoverMode);
+        for (let i = 0; i < pinsArray.length; i++) {
+          const pin = pinsArray[i];
+          if (!pin.hasEventListener("click")) {
+            pin.addEventListener("click", popupMode);
+          }
+        }
+      }
+    });
   });
 
   // Создание кружка
