@@ -42,12 +42,12 @@
 })();
 
 function interactiveImage(selector, itemsArray) {
-  const pinsArray = [];
-  const cardsArray = [];
-  const bg = wrapper.querySelector("img");
-  const wrapper = document.querySelector(selector);
-
   document.addEventListener("DOMContentLoaded", () => {
+    const wrapper = document.querySelector(selector);
+    const bg = wrapper.querySelector("img");
+    const pinsArray = [];
+    const cardsArray = [];
+
     wrapper.classList.add("_interactive");
     bg.classList.add("_interactive__bg");
 
@@ -82,22 +82,21 @@ function interactiveImage(selector, itemsArray) {
         }
       }
     });
-  });
 
-  // Создание кружка
-  function createPin() {
-    const pin = document.createElement("div");
-    pin.className = "_interactive__pin";
+    // Создание кружка
+    function createPin() {
+      const pin = document.createElement("div");
+      pin.className = "_interactive__pin";
 
-    return pin;
-  }
+      return pin;
+    }
 
-  // Создание карточки с контентом
-  function createCard(itemObject) {
-    const card = document.createElement("div");
-    card.className = "_interactive__card";
+    // Создание карточки с контентом
+    function createCard(itemObject) {
+      const card = document.createElement("div");
+      card.className = "_interactive__card";
 
-    card.innerHTML = `
+      card.innerHTML = `
         <div class="_interactive__inner">
           <div class="_interactive__close"></div>
           <a class="_interactive__title" href="${itemObject.href}">
@@ -109,98 +108,99 @@ function interactiveImage(selector, itemsArray) {
         </div>
     `;
 
-    return card;
-  }
+      return card;
+    }
 
-  // Создание и вывод элементов на картинку
-  function initItems(wrapper, bg) {
-    const width = bg.naturalWidth;
-    const height = bg.naturalHeight;
+    // Создание и вывод элементов на картинку
+    function initItems(wrapper, bg) {
+      const width = bg.naturalWidth;
+      const height = bg.naturalHeight;
 
-    // Sizes on desktop
-    const pinSize = window.innerWidth > 767.98 ? 28 : 18;
-    const cardWidth = 230;
+      // Sizes on desktop
+      const pinSize = window.innerWidth > 767.98 ? 28 : 18;
+      const cardWidth = 230;
 
-    for (let i = 0; i < itemsArray.length; i++) {
-      const itemObject = itemsArray[i];
-      const xPos = itemObject.position[0];
-      const yPos = itemObject.position[1];
+      for (let i = 0; i < itemsArray.length; i++) {
+        const itemObject = itemsArray[i];
+        const xPos = itemObject.position[0];
+        const yPos = itemObject.position[1];
 
-      if (xPos + pinSize >= width || yPos + pinSize >= height) {
-        continue;
+        if (xPos + pinSize >= width || yPos + pinSize >= height) {
+          continue;
+        }
+
+        const pin = createPin(itemObject, bg);
+        const card = createCard(itemObject);
+
+        pin.setAttribute("data-id", i);
+        pin.style.top = `${(yPos / height) * 100}%`;
+        pin.style.left = `${(xPos / width) * 100}%`;
+
+        card.setAttribute("data-id", i);
+        card.style.top = `${((yPos + pinSize) / height) * 100}%`;
+        card.style.left = `${
+          ((xPos - (cardWidth - pinSize) / 2) / width) * 100
+        }%`;
+
+        pinsArray.push(pin);
+        cardsArray.push(card);
+
+        wrapper.append(pin, card);
       }
-
-      const pin = createPin(itemObject, bg);
-      const card = createCard(itemObject);
-
-      pin.setAttribute("data-id", i);
-      pin.style.top = `${(yPos / height) * 100}%`;
-      pin.style.left = `${(xPos / width) * 100}%`;
-
-      card.setAttribute("data-id", i);
-      card.style.top = `${((yPos + pinSize) / height) * 100}%`;
-      card.style.left = `${
-        ((xPos - (cardWidth - pinSize) / 2) / width) * 100
-      }%`;
-
-      pinsArray.push(pin);
-      cardsArray.push(card);
-
-      wrapper.append(pin, card);
     }
-  }
 
-  // Hover Мод (Режим наведения на pin)
-  function hoverMode(event) {
-    const target = event.target;
+    // Hover Мод (Режим наведения на pin)
+    function hoverMode(event) {
+      const target = event.target;
 
-    if (
-      target.classList.contains("_interactive__pin") ||
-      target.closest("._interactive__card")
-    ) {
-      const el = target.closest("._interactive__card") || target;
-      const { id } = el.dataset;
-
-      const card = findCurrent(cardsArray, id);
-      const pin = findCurrent(pinsArray, id);
-
-      card.classList.add("_active");
-      pin.classList.add("_active");
-    } else {
-      removeActive();
-    }
-  }
-
-  // Popup Mode (Мод попапа)
-  function popupMode() {
-    const currentCard = findCurrent(cardsArray, this.dataset.id);
-
-    currentCard.classList.add("_active");
-    document.body.classList.add("_lock");
-
-    currentCard.addEventListener("click", (e) => {
       if (
-        !e.target.closest("._interactive__inner") ||
-        e.target.classList.contains("_interactive__close")
+        target.classList.contains("_interactive__pin") ||
+        target.closest("._interactive__card")
       ) {
-        currentCard.classList.remove("_active");
-        document.body.classList.remove("_lock");
+        const el = target.closest("._interactive__card") || target;
+        const { id } = el.dataset;
+
+        const card = findCurrent(cardsArray, id);
+        const pin = findCurrent(pinsArray, id);
+
+        card.classList.add("_active");
+        pin.classList.add("_active");
+      } else {
+        removeActive();
       }
-    });
-  }
-
-  // Находит текущий элемент по id
-  function findCurrent(array, id) {
-    return array.filter((el) => el.dataset.id == id)[0];
-  }
-
-  // Убрать все активные элементы
-  function removeActive() {
-    for (let i = 0; i < pinsArray.length; i++) {
-      pinsArray[i].classList.remove("_active");
-      cardsArray[i].classList.remove("_active");
     }
-  }
+
+    // Popup Mode (Мод попапа)
+    function popupMode() {
+      const currentCard = findCurrent(cardsArray, this.dataset.id);
+
+      currentCard.classList.add("_active");
+      document.body.classList.add("_lock");
+
+      currentCard.addEventListener("click", (e) => {
+        if (
+          !e.target.closest("._interactive__inner") ||
+          e.target.classList.contains("_interactive__close")
+        ) {
+          currentCard.classList.remove("_active");
+          document.body.classList.remove("_lock");
+        }
+      });
+    }
+
+    // Находит текущий элемент по id
+    function findCurrent(array, id) {
+      return array.filter((el) => el.dataset.id == id)[0];
+    }
+
+    // Убрать все активные элементы
+    function removeActive() {
+      for (let i = 0; i < pinsArray.length; i++) {
+        pinsArray[i].classList.remove("_active");
+        cardsArray[i].classList.remove("_active");
+      }
+    }
+  });
 }
 
 const items = [
