@@ -43,7 +43,9 @@
 
 function interactiveImage(selector, itemsArray) {
   const wrapper = document.querySelector(selector);
+  console.log(wrapper);
   const bg = wrapper.querySelector("img");
+  console.log(bg);
   const pinsArray = [];
   const cardsArray = [];
 
@@ -51,8 +53,9 @@ function interactiveImage(selector, itemsArray) {
   bg.classList.add("_interactive__bg");
 
   initItems(wrapper, bg);
+  console.log(wrapper);
 
-  if (window.innerWidth >= 1200) {
+  if (window.innerWidth > 1200) {
     wrapper.addEventListener("mouseover", hoverMode);
   } else {
     for (let i = 0; i < pinsArray.length; i++) {
@@ -62,7 +65,7 @@ function interactiveImage(selector, itemsArray) {
   }
 
   window.addEventListener("resize", () => {
-    if (window.innerWidth >= 1200) {
+    if (window.innerWidth > 1200) {
       for (let i = 0; i < pinsArray.length; i++) {
         pinsArray[i].removeEventListener("click", popupMode);
       }
