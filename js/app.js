@@ -50,8 +50,7 @@ function interactiveImage(selector, itemsArray) {
   wrapper.classList.add("_interactive");
   bg.classList.add("_interactive__bg");
 
-  initItems(wrapper, bg);
-  console.log(wrapper);
+  window.onload = initItems(wrapper, bg);
 
   if (window.innerWidth > 1200) {
     wrapper.addEventListener("mouseover", hoverMode);
@@ -110,8 +109,8 @@ function interactiveImage(selector, itemsArray) {
     return card;
   }
 
-  // Создание и вывод элементов на картинку
-  async function initItems(wrapper, bg) {
+  // Создание и вывод элементоgв на картинку
+  function initItems(wrapper, bg) {
     const width = bg.naturalWidth;
     const height = bg.naturalHeight;
 
