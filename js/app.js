@@ -111,7 +111,7 @@ function interactiveImage(selector, itemsArray) {
   }
 
   // Создание и вывод элементов на картинку
-  function initItems(wrapper, bg) {
+  async function initItems(wrapper, bg) {
     const width = bg.naturalWidth;
     const height = bg.naturalHeight;
 
