@@ -42,14 +42,12 @@
 })();
 
 function interactiveImage(selector, itemsArray) {
-  document.addEventListener("DOMContentLoaded", () => {
-    const wrapper = document.querySelector(selector);
-    console.log(wrapper);
-    const bg = wrapper.querySelector("img");
-    console.log(bg);
-    const pinsArray = [];
-    const cardsArray = [];
+  const pinsArray = [];
+  const cardsArray = [];
+  const bg = wrapper.querySelector("img");
+  const wrapper = document.querySelector(selector);
 
+  document.addEventListener("DOMContentLoaded", () => {
     wrapper.classList.add("_interactive");
     bg.classList.add("_interactive__bg");
 
