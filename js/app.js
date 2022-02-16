@@ -50,7 +50,10 @@ function interactiveImage(selector, itemsArray) {
   wrapper.classList.add("_interactive");
   bg.classList.add("_interactive__bg");
 
-  window.onload = initItems(wrapper, bg);
+  window.onload = () => {
+    initItems(wrapper, bg);
+    console.log("страница загружена");
+  };
 
   if (window.innerWidth > 1200) {
     wrapper.addEventListener("mouseover", hoverMode);
